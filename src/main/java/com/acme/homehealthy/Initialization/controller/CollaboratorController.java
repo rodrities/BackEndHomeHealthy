@@ -5,9 +5,11 @@ import com.acme.homehealthy.Initialization.domain.model.Collaborator;
 import com.acme.homehealthy.Initialization.domain.service.CollaboratorService;
 import com.acme.homehealthy.Initialization.resource.CollaboratorResource;
 import com.acme.homehealthy.Initialization.resource.SaveCollaboratorResource;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ public class CollaboratorController {
     @Autowired
     private CollaboratorService collaboratorService;
 
+    @Value(value = "Find all collaborators")
     @GetMapping("/collaborators")
     public Page<CollaboratorResource> getAllCollaborators(Pageable pageable){
         Page<Collaborator> collaborators = collaboratorService.getAllCollaborators(pageable);
