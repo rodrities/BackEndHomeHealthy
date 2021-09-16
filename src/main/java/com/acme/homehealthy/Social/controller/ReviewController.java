@@ -4,6 +4,7 @@ import com.acme.homehealthy.Social.domain.model.Review;
 import com.acme.homehealthy.Social.domain.service.ReviewService;
 import com.acme.homehealthy.Social.resource.ReviewResource;
 import com.acme.homehealthy.Social.resource.SaveReviewResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class ReviewController {
     @Autowired
     private ModelMapper mapper;
 
+    @Operation(summary = "Find all reviews")
     @GetMapping("/reviews")
     public Page<ReviewResource> getAllReview(Pageable pageable){
         Page<Review> reviews = reviewService.getAllReviews(pageable);
@@ -35,12 +37,14 @@ public class ReviewController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find review by customer Id and collaborator Id")
     @GetMapping("/reviews/{customerId}/{collaboratorId}")
     public ReviewResource getReviewByCustomerAndCollaborator(@Valid @PathVariable(name = "customerId") Long customerId,
                                                              @Valid @PathVariable(name = "collaboratorId") Long collaborator){
         return convertToResource(reviewService.getReviewByCustomerAndCollaborator(customerId,collaborator));
     }
 
+    @Operation(summary = "Create a review")
     @PostMapping("/reviews/{customerId}/{collaboratorId}/{scoreId}")
     public ReviewResource createReview(@Valid @PathVariable(name = "customerId") Long customerId,
                                        @Valid @PathVariable(name = "collaboratorId") Long collaborator,
@@ -50,6 +54,8 @@ public class ReviewController {
         return convertToResource(reviewService.createReview(customerId,collaborator,scoredId,review));
     }
     //Review updateReview(Long customerId, Long collaboratorId, Long scoreId, Review reviewRequest);
+
+    @Operation(summary = "Update a review")
     @PutMapping("/reviews/{customerId}/{collaboratorId}/{scoreId}")
     public ReviewResource updateReview(@Valid @PathVariable(name = "customerId") Long customerId,
                                        @Valid @PathVariable(name = "collaboratorId") Long collaborator,
@@ -59,6 +65,7 @@ public class ReviewController {
         return convertToResource(reviewService.updateReview(customerId,collaborator,scoredId,review));
     }
 
+    @Operation(summary = "Delete a review")
     @DeleteMapping("/reviews/{customerId}/{collaboratorId}")
     public ResponseEntity<?> updateReview(@Valid @PathVariable(name = "customerId") Long customerId,
                                        @Valid @PathVariable(name = "collaboratorId") Long collaboratorId){

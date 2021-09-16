@@ -5,6 +5,7 @@ import com.acme.homehealthy.Social.domain.service.ScoreService;
 import com.acme.homehealthy.Social.resource.SaveComplaintResource;
 import com.acme.homehealthy.Social.resource.SaveScoreResource;
 import com.acme.homehealthy.Social.resource.ScoreResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class ScoreController {
     @Autowired
     private ModelMapper mapper;
 
+    @Operation(summary = "Find all scores")
     @GetMapping("/scores")
     public Page<ScoreResource> getAllScores(Pageable pageable){
         Page<Score> scores = scoreService.getAllScore(pageable);
@@ -37,17 +39,20 @@ public class ScoreController {
         return new PageImpl<>(resources,pageable,resources.size());
     }
 
+    @Operation(summary = "Find score by Id")
     @GetMapping("/scores/{scoreId}")
     public ScoreResource getScoreById(@Valid @PathVariable(name = "scoredId") Long scoredId){
         return convertToResource(scoreService.getScoreById(scoredId));
     }
 
+    @Operation(summary = "Create a score")
     @PostMapping("/scores")
     public ScoreResource getScoreById(@Valid @RequestBody SaveScoreResource resource){
         Score score = convertToEntity(resource);
         return convertToResource(scoreService.createScore(score));
     }
 
+    @Operation(summary = "Update a score")
     @PutMapping("/score/{scoreId}")
     public ScoreResource updateScoreById(@Valid @PathVariable(name = "scoredId") Long scoredId,
                                          @Valid @RequestBody SaveScoreResource resource){
@@ -55,6 +60,7 @@ public class ScoreController {
         return convertToResource(scoreService.updateScore(scoredId,score));
     }
 
+    @Operation(summary = "Delete a score")
     @DeleteMapping("/score/{scoreId}")
     public ResponseEntity<?> deleteScoreById(@Valid @PathVariable(name = "scoredId") Long scoredId){
         scoreService.deleteScore(scoredId);

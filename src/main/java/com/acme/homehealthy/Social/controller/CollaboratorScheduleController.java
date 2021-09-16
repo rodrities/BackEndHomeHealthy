@@ -8,6 +8,7 @@ import com.acme.homehealthy.Social.domain.model.CollaboratorSchedule;
 import com.acme.homehealthy.Social.domain.service.CollaboratorScheduleService;
 import com.acme.homehealthy.Social.resource.CollaboratorScheduleResource;
 import com.acme.homehealthy.Social.resource.SaveCollaboratorSchedule;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class CollaboratorScheduleController {
     @Autowired
     private ModelMapper mapper;
 
+    @Operation(summary = "Find collaboratorSchedules by collaborator Id")
     @GetMapping("/collaborators/{collaboratorId}/schedules")
     public Page<CollaboratorScheduleResource> getAllCollaboratorSchedulesByCollaboratorId(
             @PathVariable(value = "collaboratorId") Long collaboratorId,
@@ -41,6 +43,7 @@ public class CollaboratorScheduleController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find collaboratorSchedules by Id")
     @GetMapping("/collaborators/{collaboratorId}/schedules/{scheduleId}")
     public CollaboratorScheduleResource getCollaboratorScheduleByIdAndUser(
             @PathVariable(name = "collaboratorId") Long collaboratorId,
@@ -48,6 +51,7 @@ public class CollaboratorScheduleController {
         return convertToResource(collaboratorScheduleService.getCollaboratorScheduleByIdAndCollaboratorId(collaboratorId, scheduleId));
     }
 
+    @Operation(summary = "Create collaboratorSchedule")
     @PostMapping("/collaborators/{collaboratorId}/schedules")
     public CollaboratorScheduleResource createCollaboratorSchedule(
             @PathVariable(value = "collaboratorId") Long collaboratorId,
@@ -56,6 +60,7 @@ public class CollaboratorScheduleController {
                 convertToEntity(resource)));
     }
 
+    @Operation(summary = "Update collaboratorSchedule")
     @PutMapping("/collaborators/{collaboratorId}/schedules/{schedulesId}")
     public CollaboratorScheduleResource updateSession(
             @PathVariable(value = "collaboratorId") Long collaboratorId,
@@ -64,6 +69,7 @@ public class CollaboratorScheduleController {
         return null;
     }
 
+    @Operation(summary = "Delete collaboratorSchedule")
     @DeleteMapping("/collaborators/{collaboratorId}/schedules/{schedulesId}")
     public ResponseEntity<?> deleteSession(
             @PathVariable(value = "collaboratorId") Long collaboratorId,

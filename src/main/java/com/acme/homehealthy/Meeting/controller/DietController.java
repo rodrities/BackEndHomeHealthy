@@ -10,6 +10,7 @@ import com.acme.homehealthy.Meeting.resource.SaveDietResource;
 import com.acme.homehealthy.Meeting.resource.SessionResource;
 import com.acme.homehealthy.Social.domain.model.Review;
 import com.acme.homehealthy.Social.resource.ReviewResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class DietController {
         return new PageImpl<>(resources, pageable, resources.size());
     }*/
 
+    @Operation(summary = "Find all diets")
     @GetMapping("/diets")
     public Page<DietResource> getAllDiets(Pageable pageable){
         Page<Diet> reviews = dietService.getAllDiets(pageable);
@@ -50,6 +52,7 @@ public class DietController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find diets by customer Id")
     @GetMapping("/customers/{customerId}/diets")
     public Page<DietResource> getAllDietsByUserId(
             @PathVariable(value = "customerId") Long customerId,
@@ -59,6 +62,8 @@ public class DietController {
                 .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
+
+    @Operation(summary = "Find diets by collaborator Id")
     @GetMapping("/collaborators/{collaboratorId}/diets")
     public Page<DietResource> getAllDietsByCollaboratorId(
             @PathVariable(value = "collaboratorId") Long collaboratorId,
@@ -69,6 +74,7 @@ public class DietController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find diet by Id")
     @GetMapping("/diets/{dietId}")
     public DietResource getDietname(@Valid @PathVariable (value = "dietId") Long dietId){
         return convertToResource(dietService.getDietById(dietId));
@@ -82,6 +88,8 @@ public class DietController {
         Diet diet = convertToEntity(resource);
         return convertToResource(dietService.createDiet(diet,id));
     }*/
+
+    @Operation(summary = "Create a diet")
     @PostMapping("/diets/{collaboratorId}/{customerId}")
     public DietResource createDiet(@Valid @RequestBody SaveDietResource resource,
                                    @Valid @PathVariable (value = "customerId") Long customerId,
@@ -90,7 +98,7 @@ public class DietController {
                 convertToEntity(resource)));
         }
 
-        //no funciona
+    @Operation(summary = "Update a diet")
     @PutMapping("/diets/{dietId}/{sessionId}")
     public DietResource updateDiet( @Valid @PathVariable (value = "dietId") Long dietId,
                                     @Valid @RequestBody SaveDietResource resource,
@@ -99,7 +107,7 @@ public class DietController {
         return convertToResource(dietService.updateDiet(dietId,diet, sessionId));
     }
 
-
+    @Operation(summary = "Delete a diet")
     @DeleteMapping("/diets/{name}")
     public ResponseEntity<?> deleteDiet(@Valid @PathVariable (value = "name") String name){
         return  dietService.deleteDiet(name);

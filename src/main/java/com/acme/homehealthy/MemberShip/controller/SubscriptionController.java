@@ -3,6 +3,7 @@ package com.acme.homehealthy.MemberShip.controller;
 import com.acme.homehealthy.MemberShip.domain.service.SubscriptionService;
 import com.acme.homehealthy.MemberShip.resource.OrderSubscriptionResource;
 import com.acme.homehealthy.MemberShip.resource.SaveOrderSubscriptionResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,14 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     //OrderSubscription getOrderSubscriptionById(Long id);
+    @Operation(summary = "Find subscription by Id")
     @GetMapping("/subscription/{orderSubscriptionId}")
     public OrderSubscriptionResource getOrderSubscriptionById(@Valid @PathVariable (name = "orderSubscriptionId") Long id){
         return convertToResource(subscriptionService.getOrderSubscriptionById(id));
     }
 
     //OrderSubscription createOrderSubscription(OrderSubscription subscription);
+    @Operation(summary = "Create a subscription")
     @PostMapping("/subscription/{planId}/{customerId}")
     public OrderSubscriptionResource createOrderSubscription(@Valid @RequestBody SaveOrderSubscriptionResource resource,
                                                              @Valid @PathVariable (value = "planId") Long planId,
@@ -38,6 +41,7 @@ public class SubscriptionController {
     }
 
     //OrderSubscription updateOrderSubscription(Long id, OrderSubscription subscription);
+    @Operation(summary = "Update a subscription")
     @PutMapping("/subscription/{orderSubscriptionId}/{planId}/{customerId}")
     public OrderSubscriptionResource updateOrderSubscription(@Valid @PathVariable (name = "orderSubscriptionId") Long id,
                                                              @Valid @PathVariable (name = "planId") Long planId,
@@ -48,6 +52,7 @@ public class SubscriptionController {
     }
 
     //ResponseEntity<?> deleteOrderSubscription(Long id);
+    @Operation(summary = "Delete a subscription")
     @DeleteMapping("/subscription/{orderSubscriptionId}")
     public ResponseEntity<?> deleteOrderSubscription(@Valid @PathVariable (name = "orderSubscriptionId") Long id){
         subscriptionService.deleteOrderSubscription(id);

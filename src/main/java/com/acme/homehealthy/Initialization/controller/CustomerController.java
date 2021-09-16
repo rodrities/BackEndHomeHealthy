@@ -6,6 +6,7 @@ import com.acme.homehealthy.Initialization.domain.service.CustomerService;
 import com.acme.homehealthy.Initialization.resource.CollaboratorResource;
 import com.acme.homehealthy.Initialization.resource.CustomerResource;
 import com.acme.homehealthy.Initialization.resource.SaveCustomerResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class CustomerController {
     @Autowired
     private ModelMapper mapper;
 
+    @Operation(summary = "Find all customers")
     @GetMapping("/customers")
     public Page<CustomerResource> getAllCustomers(Pageable pageable){
         Page<Customer> customers = customerService.getAllCustomers(pageable);
@@ -37,24 +39,28 @@ public class CustomerController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find customer by Id")
     @GetMapping("/customer/{customerId}")
     public CustomerResource getCustomerById(@Valid @PathVariable(value = "customerId") Long customerId) {
         return convertToResource(customerService.getCustomerById(customerId));
 
     }
 
+    @Operation(summary = "Find customer by username and password")
     @GetMapping("/customers/{username}/{password}")
     public CustomerResource getCustomerByUsernameAndPassword(@Valid @PathVariable(value = "username") String username,
                                                              @Valid @PathVariable(value = "password") String password) {
         return convertToResource(customerService.getCustomerByUsernameAndPassword(username, password));
     }
 
+    @Operation(summary = "Create a new customer")
     @PostMapping("/customers")
     public CustomerResource createCustomer(@Valid @RequestBody SaveCustomerResource resource) {
         Customer customer = convertToEntity(resource);
         return convertToResource(customerService.createCustomer(customer));
     }
 
+    @Operation(summary = "Update a customer")
     @PutMapping("/customers/{customerId}")
     public CustomerResource updateCustomer(@Valid @PathVariable(value = "customerId") Long customerId,
                                            @Valid @RequestBody SaveCustomerResource resource) {
@@ -62,6 +68,7 @@ public class CustomerController {
         return convertToResource(customerService.updateCustomer(customerId, customer));
     }
 
+    @Operation(summary = "Delete a customer")
     @DeleteMapping("/customers/{username}")
     public ResponseEntity<?> deleteCustomer(@Valid @PathVariable(value = "username") String username) {
         return customerService.deleteCustomer(username);

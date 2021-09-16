@@ -7,6 +7,7 @@ import com.acme.homehealthy.MemberShip.domain.model.Plan;
 import com.acme.homehealthy.MemberShip.domain.service.PlanService;
 import com.acme.homehealthy.MemberShip.resource.PlanResource;
 import com.acme.homehealthy.MemberShip.resource.SavePlanResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class PlanController {
     @Autowired
     private PlanService planService;
 
+    @Operation(summary = "Find all plans")
     @GetMapping("/plans")
     public Page<PlanResource> getAllPlans(Pageable pageable){
         Page<Plan> planPage = planService.getAllPlans(pageable);
@@ -38,6 +40,7 @@ public class PlanController {
         return new PageImpl<>(resources,pageable,resources.size());
     }
 
+    @Operation(summary = "Find plan by price")
     @GetMapping("/plans/{price}")
     public Page<PlanResource> getAllPlansByPriceLessThanEqual(@Valid @PathVariable (value = "price") Long price,
                                                               Pageable pageable){
@@ -46,22 +49,26 @@ public class PlanController {
         return new PageImpl<>(resources,pageable,resources.size());
     }
 
+    @Operation(summary = "Find plan by Id")
     @GetMapping("/plans/{planId}/id")
     public PlanResource getPlanById(@Valid @PathVariable (value = "planId") Long planId){
         return convertToResource(planService.getPlanById(planId));
     }
 
+    @Operation(summary = "Find plan by name")
     @GetMapping("/plans/{planName}/name")
     public PlanResource getPlanByName(@Valid @PathVariable (value = "planName") String planName){
         return convertToResource(planService.getPlanByName(planName));
     }
 
+    @Operation(summary = "Create a plan")
     @PostMapping("/plans")
     public PlanResource createPlan(@Valid @RequestBody SavePlanResource resource){
         Plan plan = convertToEntity(resource);
         return convertToResource(planService.createPlan(plan));
     }
 
+    @Operation(summary = "Update a plan")
     @PutMapping("/plans/{planId}")
     public PlanResource updatePlan(@Valid @PathVariable (value = "planId") Long planId,
                                    SavePlanResource resource){
@@ -69,6 +76,7 @@ public class PlanController {
         return convertToResource(planService.updatePlan(planId,plan));
     }
 
+    @Operation(summary = "Delete a plan")
     @DeleteMapping("/plans/{planId}")
     public ResponseEntity<?> deletePlan(@Valid @PathVariable (value = "planId") Long planId){
         planService.deletePlan(planId);
