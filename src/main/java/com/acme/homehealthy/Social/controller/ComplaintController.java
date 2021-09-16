@@ -5,6 +5,7 @@ import com.acme.homehealthy.Social.domain.model.Complaint;
 import com.acme.homehealthy.Social.domain.service.ComplaintService;
 import com.acme.homehealthy.Social.resource.ComplaintResource;
 import com.acme.homehealthy.Social.resource.SaveComplaintResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class ComplaintController {
     @Autowired
     private ModelMapper mapper;
 
+    @Operation(summary = "Find all complaints")
     @GetMapping("/complaints")
     public Page<ComplaintResource> getAllComplaints(Pageable pageable){
         Page<Complaint> complaints = complaintService.getAllComplaints(pageable);
@@ -36,11 +38,13 @@ public class ComplaintController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find complaints by id")
     @GetMapping("/complaints/{complaintId}")
     public ComplaintResource getComplaintById(@Valid @PathVariable(name = "complaintId") Long complaintId){
         return convertToResource(complaintService.getComplaintById(complaintId));
     }
 
+    @Operation(summary = "Create complaint")
     @PostMapping("/complaints/{customerId}/{reasonId}")
     public ComplaintResource createComplaint(@Valid @PathVariable(name = "customerId") Long customerId,
                                              @Valid @PathVariable(name = "reasonId") Long reasonId,
@@ -49,6 +53,7 @@ public class ComplaintController {
         return convertToResource(complaintService.createComplaint(customerId,reasonId,complaint));
     }
 
+    @Operation(summary = "Update complaint")
     @PutMapping("/complaints/{complaintId}/{customerId}/{reasonId}")
     public ComplaintResource updateComplaint(@Valid @PathVariable(name = "complaintId") Long complaintId,
                                              @Valid @PathVariable(name = "customerId") Long customerId,
@@ -58,6 +63,7 @@ public class ComplaintController {
         return convertToResource(complaintService.updateComplaint(customerId,reasonId,complaintId,complaint));
     }
 
+    @Operation(summary = "Delete complaint")
     @DeleteMapping("/complaints/{complaintId}")
     public ResponseEntity<?> deleteComplaint(@Valid @PathVariable(name = "complaintId") Long complaintId){
         complaintService.deleteComplaint(complaintId);

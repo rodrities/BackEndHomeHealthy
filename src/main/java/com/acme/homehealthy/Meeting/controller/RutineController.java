@@ -8,6 +8,7 @@ import com.acme.homehealthy.Meeting.resource.DietResource;
 import com.acme.homehealthy.Meeting.resource.RutineResource;
 import com.acme.homehealthy.Meeting.resource.SaveDietResource;
 import com.acme.homehealthy.Meeting.resource.SaveRutineResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class RutineController {
     @Autowired
     private ModelMapper mapper;
 
+    @Operation(summary = "Find all routines")
     @GetMapping("/rutines")
     public Page<RutineResource> getAllRutines(Pageable pageable){
         Page<Rutine> reviews = rutineService.getAllRutines(pageable);
@@ -38,6 +40,7 @@ public class RutineController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find routines by customer Id")
     @GetMapping("/customers/{customerId}/rutines")
     public Page<RutineResource> getAllRutinesByUserId(
             @PathVariable(value = "customerId") Long customerId,
@@ -47,6 +50,8 @@ public class RutineController {
                 .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
+
+    @Operation(summary = "Find routines by collaborator Id")
     @GetMapping("/collaborators/{collaboratorId}/rutines")
     public Page<RutineResource> getAllRutinesByCollaboratorId(
             @PathVariable(value = "collaboratorId") Long collaboratorId,
@@ -57,12 +62,13 @@ public class RutineController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find routine by Id")
     @GetMapping("/rutines/{rutineId}")
     public RutineResource getRutinename(@Valid @PathVariable (value = "rutineId") Long rutineId){
         return convertToResource(rutineService.getRutineById(rutineId));
     }
 
-
+    @Operation(summary = "Create a routine")
     @PostMapping("/rutines/{collaboratorId}/{customerId}")
     public RutineResource createRutine(@Valid @RequestBody SaveRutineResource resource,
                                    @Valid @PathVariable (value = "customerId") Long customerId,
@@ -71,7 +77,7 @@ public class RutineController {
                 convertToEntity(resource)));
     }
 
-    //no funciona
+    @Operation(summary = "Update a routine")
     @PutMapping("/rutines/{rutineId}/{sessionId}")
     public RutineResource updateRutine( @Valid @PathVariable (value = "rutineId") Long rutineId,
                                     @Valid @RequestBody SaveRutineResource resource,
@@ -80,7 +86,7 @@ public class RutineController {
         return convertToResource(rutineService.updateRutine(rutineId,rutine, sessionId));
     }
 
-
+    @Operation(summary = "Delete a routine")
     @DeleteMapping("/rutines/{name}")
     public ResponseEntity<?> deleteRutine(@Valid @PathVariable (value = "name") String name){
         return  rutineService.deleteRutine(name);

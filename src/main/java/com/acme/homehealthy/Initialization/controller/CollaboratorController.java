@@ -41,23 +41,27 @@ public class CollaboratorController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @Operation(summary = "Find collaborator by Id")
     @GetMapping("/collaborators/{collaboratorId}")
     public CollaboratorResource getCollaboratorById(@Valid @PathVariable (value = "collaboratorId") Long collaboratorId){
         return convertToResource(collaboratorService.getCollaboratorById(collaboratorId));
     }
 
+    @Operation(summary = "Find collaborator by username and password")
     @GetMapping("/collaborators/{username}/{password}")
     public CollaboratorResource getCollaboratorByUsernameAndPassword(   @Valid @PathVariable (value = "username") String username,
                                                                         @Valid @PathVariable (value = "password") String password){
         return convertToResource(collaboratorService.getCollaboratorByUsernameAndPassword(username,password));
     }
 
+    @Operation(summary = "Create a new collaborator")
     @PostMapping("/collaborators")
     public CollaboratorResource createCollaborator(@Valid @RequestBody SaveCollaboratorResource resource){
         Collaborator collaborator = convertToEntity(resource);
         return convertToResource(collaboratorService.createCollaborator(collaborator));
     }
 
+    @Operation(summary = "Update a existing collaborator")
     @PutMapping("/collaborators/{collaboratorId}")
     public CollaboratorResource updateCollaborator(@Valid @PathVariable (value = "collaboratorId") Long id,
                                                    @Valid @RequestBody SaveCollaboratorResource resource){
@@ -65,6 +69,7 @@ public class CollaboratorController {
         return convertToResource(collaboratorService.updateCollaborator(id,collaborator));
     }
 
+    @Operation(summary = "Delete a collaborator")
     @DeleteMapping("/collaborators/{username}")
     public ResponseEntity<?> deleteCollaborator(@Valid @PathVariable (value = "username") String username){
         collaboratorService.deleteCollaborator(username);

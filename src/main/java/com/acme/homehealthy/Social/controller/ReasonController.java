@@ -4,6 +4,7 @@ import com.acme.homehealthy.Social.domain.model.Reason;
 import com.acme.homehealthy.Social.domain.service.ReasonService;
 import com.acme.homehealthy.Social.resource.ReasonResource;
 import com.acme.homehealthy.Social.resource.SaveReasonResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class ReasonController {
     private ModelMapper mapper;
 
     //Page<Reason> getAllReasons(Pageable pageable);
+    @Operation(summary = "Find all reasons")
     @GetMapping("/reasons")
     public Page<ReasonResource> getAllReasons(Pageable pageable){
         Page<Reason> reasons = reasonService.getAllReasons(pageable);
@@ -37,17 +39,20 @@ public class ReasonController {
     }
 
     //Reason getReasonById(Long id);
+    @Operation(summary = "Find reason by Id")
     @GetMapping("/reasons/{reasonId}")
     public ReasonResource getReasonById(@Valid @PathVariable(name = "reasonId") Long reasonId){
         return convertToResource(reasonService.getReasonById(reasonId));
     }
     //Reason createReason(Reason reasonRequest);
+    @Operation(summary = "Create reason")
     @PostMapping("/reasons")
     public ReasonResource createReasonById(@Valid @RequestBody SaveReasonResource resource){
         Reason reason = convertToEntity(resource);
         return convertToResource(reasonService.createReason(reason));
     }
     //Reason updateReason(Long id, Reason reasonRequest);
+    @Operation(summary = "Create reason")
     @PutMapping("/reasons/{reasonId}")
     public ReasonResource updateReasonById(@Valid @PathVariable(name = "reasonId") Long reasonId,
                                         @Valid @RequestBody SaveReasonResource resource){
@@ -55,6 +60,7 @@ public class ReasonController {
         return convertToResource(reasonService.updateReason(reasonId, reason));
     }
     //ResponseEntity<?> deleteReason(Long id);
+    @Operation(summary = "Delete reason")
     @DeleteMapping("/reasons/{reasonId}")
     public ResponseEntity<?> updateReasonById(@Valid @PathVariable(name = "reasonId") Long reasonId){
         reasonService.deleteReason(reasonId);
