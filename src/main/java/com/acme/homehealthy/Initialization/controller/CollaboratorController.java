@@ -6,7 +6,9 @@ import com.acme.homehealthy.Initialization.domain.service.CollaboratorService;
 import com.acme.homehealthy.Initialization.resource.CollaboratorResource;
 import com.acme.homehealthy.Initialization.resource.SaveCollaboratorResource;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apiguardian.api.API;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +33,7 @@ public class CollaboratorController {
     @Autowired
     private CollaboratorService collaboratorService;
 
-    @Value(value = "Find all collaborators")
+    @Operation(summary="Find all collaborators")
     @GetMapping("/collaborators")
     public Page<CollaboratorResource> getAllCollaborators(Pageable pageable){
         Page<Collaborator> collaborators = collaboratorService.getAllCollaborators(pageable);
